@@ -1,5 +1,3 @@
-import codependency from 'codependency';
-let requirePeer = codependency.register(module);
 import fs from 'fs';
 import path from 'path';
 import {performance, PerformanceObserver} from 'perf_hooks';
@@ -18,7 +16,13 @@ import OutputTable from './IO/OutputTable';
 import Utils from './utils/utils';
 import Factory from './utils/factory';
 if(property.inputDB||property.configDB||property.outputDB){
-	let pg = requirePeer('pg')
+	try{
+		let pg = require('pg')
+		console.log("Found package pg")
+	} catch (err){
+		console.log("Could not find pg")
+		pg = null;
+	}
 }
 
 //Read from one or more paths
