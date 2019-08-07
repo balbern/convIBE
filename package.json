@@ -1,0 +1,36 @@
+{
+  "name": "convIBE",
+  "version": "1.0.0",
+  "description": "generic Transformation-Tool",
+  "main": "lib/main.js",
+  "dependencies": {
+    "codependency": "^2.1.0",
+    "js2xmlparser": "^3.0.0",
+    "pretty-ms": "^5.0.0"
+  },
+  "optionalPeerDependencies": {
+    "pg": "^7.12.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/node": "^7.5.5",
+    "@babel/preset-env": "^7.5.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib",
+    "start": "npm run-script build && node lib/main.js $FILE",
+    "run": "node lib/main.js $FILE"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.lrz.de:/balbern/convIBE"
+  },
+  "keywords": [
+    "ETL"
+  ],
+  "author": "Isabel Reinhardt, Bernd Ahlborn",
+  "license": "AGPLv3",
+  "private": false
+}

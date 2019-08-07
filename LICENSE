@@ -1,0 +1,21 @@
+convIBE is a gerneric tool for the transformation of data.
+It can be utilized to transforms the structure as well as the contained
+information. The software is written to provide a rich variety of 
+transformations while using an easy to understand language (inspired by XPath)
+defining the configuration files.
+
+convIBE
+Copyright (C) 2019  Isabel Reinhardt, Bernd Ahlborn, Ulrich Mansmann
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+A copy of the GNU Affero General Public License is included in this package in 
+agplv3.txt.
