@@ -8,22 +8,26 @@ let basePath = path.dirname(propertyPath)+'/';
 console.log("basePath",basePath);
 export let property = require(propertyPath).property;
 module.exports.property = property;
-
+let pg,DB;
 import Storage from './store/Storage';
 import FileReader from './IO/FileReader';
 import MetaObj from './IO/MetaObj';
 import OutputTable from './IO/OutputTable';
 import Utils from './utils/utils';
 import Factory from './utils/factory';
+
 if(property.inputDB||property.configDB||property.outputDB){
 	try{
-		let pg = require('pg')
+		pg = require('pg');
+		DB = require('./IO/db').default;
 		console.log("Found package pg")
 	} catch (err){
-		console.log("Could not find pg")
-		pg = null;
+		console.log(err.stack)
+		throw "Could not find pg"
 	}
 }
+
+async function main(){
 
 //Read from one or more paths
 if (Utils.isPrimitive(property.configDir)){
@@ -50,10 +54,26 @@ if (Utils.isPrimitive(property.inputDir)){
 	property.inputDir = [property.inputDir]
 }
 let data = {};
-property.inputDir.forEach(inputDirPath=>{
-	inputDirPath=basePath+inputDirPath;
-	Object.assign(data,FileReader.readDataDir(inputDirPath))
-})
+if(property.inputDir){
+	property.inputDir.forEach(inputDirPath=>{
+		inputDirPath=basePath+inputDirPath;
+		Object.assign(data,FileReader.readDataDir(inputDirPath))
+	})	
+} else {
+	console.log("Reading no files from Filesystem. No input directory given.")
+}
+
+//console.log('data1',data);
+if(pg&&DB){
+	console.log('Loading Data from DB')
+	let db = new DB()
+	property.inputDBTables.forEach(async tableName => {
+		let table = await db.getTable(tableName).then(d => {return d;}).catch(e => console.error(e.stack));
+		data = {...data,...table};	
+	})
+	
+}
+
 //Link Tables according to property file
 Utils.adjustTables(data,property.tables);
 
@@ -163,3 +183,7 @@ if(property.outputFormat === 'csv'){
 
 console.log('')
 console.log("It took "+prettyMS(lastTime ));
+
+}
+
+main();

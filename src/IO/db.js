@@ -1,4 +1,6 @@
 import { Pool} from 'pg';
+import Factory from '../utils/factory';
+
 export default class DB { 
 	constructor(dbOpt) {
 		if(dbOpt){
@@ -23,7 +25,9 @@ export default class DB {
   	async getTable(tableName){
   		let res = await this.query({name:'test',text:'SELECT * from '+tableName,rowMode:'array'})
   		let data = res.fields.map(field => field.name);
-  		return [data,...res.rows]
+  		let table = new Factory('Table',[tableName]);
+  		table.createJSON([data,...res.rows])
+  		return table;
   	}
 }
 
