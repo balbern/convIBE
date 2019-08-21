@@ -39,6 +39,12 @@ class Storage {
 	}
 
 	arrayGetData(array,obj,data){
+		if(array.length===1&&array[0]===''){
+			if(data){
+				return data;
+			}
+			return obj;
+		}
 		array.every((key,index)=>{
 			if(obj.has(key)){
 				if(data&&index+1===array.length){

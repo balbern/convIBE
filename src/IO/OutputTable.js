@@ -43,8 +43,6 @@ export default class OutputTable {
 	}
 
 	addData(inputRow) {
-		//console.log("Adding",inputRow);
-		//console.log("constructor",);
 		if(inputRow.constructor.name != 'Array'){
 			inputRow = [inputRow];
 		}
@@ -57,7 +55,6 @@ export default class OutputTable {
 				columnNumber = this.hasColumn(item)
 			}
 			outputRow[columnNumber] = row[item];
-			//console.log(outputRow,"This",outputRow[columnNumber],"at",columnNumber,item)
 		})
 		this.data.push(outputRow);
 		})

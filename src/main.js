@@ -63,7 +63,6 @@ if(property.inputDir){
 	console.log("Reading no files from Filesystem. No input directory given.")
 }
 
-//console.log('data1',data);
 if(pg&&DB){
 	console.log('Loading Data from DB')
 	let db = new DB()
@@ -81,7 +80,6 @@ let startTable = property.startTable;
 
 //Build MetaObj
 let metaDataObj = Utils.transformToMetaObj(data,startTable);
-
 
 //Iterate over Data
 //Early Breaks for testing like SQL limit 10 or top 10
@@ -118,7 +116,7 @@ for (let primaryKeyValue of primaryKeys.keys()){
 		let removeKeys = Storage.xPathGetDataFromStorage("REMOVEKEY/"+property.namespace);
 		if(removeKeys){
 			removeKeys.forEach((value,xPath)=>{
-				Utils.removeItems(output.xml,xPath,value.get('valueStorage'));
+				output.xml=Utils.removeItems(output.xml,xPath,value.get('valueStorage'));
 			})
 		}
 		let fileContent;
@@ -127,7 +125,6 @@ for (let primaryKeyValue of primaryKeys.keys()){
 			switch(property.outputFormat){
 					case 'json':
 						fileContent = JSON.stringify(Utils.strMapToObj(output.xml));
-						//console.log(JSON.stringify(Utils.strMapToObj(output.xml)));
 						break;
 					case 'xml':
 						fileContent = output.finishXML();
@@ -140,7 +137,6 @@ for (let primaryKeyValue of primaryKeys.keys()){
 						if (property.xPathGetFileNameFromXML){
 							fileName = output.xPathGetDataFromXML(property.xPathGetFileNameFromXML)[0];	
 						}
-						//console.log(fileContent);
 						output.xml.forEach((content,fileName) =>{
 							if(!tablesOutput.has(fileName)){
 								tablesOutput.set(fileName,new OutputTable(fileName));
@@ -161,7 +157,7 @@ for (let primaryKeyValue of primaryKeys.keys()){
 			}
 		}
 		catch(error) {
-			console.log(e);
+			console.log(error);
 			console.error("Error with entry number ",primaryKeyValue,countUp);
 		}
 		countUp++;

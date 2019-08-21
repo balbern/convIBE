@@ -133,7 +133,10 @@ class Utils{
 	removeItems(origData,dir,remove) {
 		let count = 0;
 		let newArray = [];
-		let data = Storage.xPathGetDataWithIterator(dir,origData);
+		let data = origData;
+		if(dir){
+			data = Storage.xPathGetDataWithIterator(dir,origData);
+		}
 	    data.forEach(entry => {
 			if(!remove.every(removeItem => {
 				if(entry.has(removeItem)){
@@ -146,7 +149,7 @@ class Utils{
 				newArray.push(entry);
 			}
 		})
-		Storage.xPathGetDataWithIterator(dir,origData,newArray);
+		return Storage.xPathGetDataWithIterator(dir,origData,newArray);
 	}
 
 
