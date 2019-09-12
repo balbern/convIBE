@@ -23,12 +23,18 @@ export default class DB {
   		return this.pool.end();
   	}
   	async getTable(tableName){
-  		let res = await this.query({name:'test',text:'SELECT * from '+tableName,rowMode:'array'})
+  		let res = await this.query({text:'SELECT * from '+tableName,rowMode:'array'})
   		let data = res.fields.map(field => field.name);
   		let table = new Factory('Table',[tableName]);
   		table.createJSON([data,...res.rows])
   		return table;
   	}
+
+  	async setSchema(schemaName){
+  		let res = await this.query({text:'SET search_path TO '+schemaName,rowMode:'array'})
+  		return res;
+  	}
+
 }
 
 //Usage:

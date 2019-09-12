@@ -67,6 +67,12 @@ if(pg&&DB){
 	console.log('Loading Data from DB')
 	let db = new DB()
 	property.inputDBTables.forEach(async tableName => {
+		let splitName = tableName.split('.');
+		if(splitName[1]){
+			console.log("Setting Schema");
+			await db.setSchema(splitName[0]);
+			tableName = splitName[1];
+		}
 		let table = await db.getTable(tableName).then(d => {return d;}).catch(e => console.error(e.stack));
 		data = {...data,...table};	
 	})
