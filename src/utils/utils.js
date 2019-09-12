@@ -467,7 +467,7 @@ class Utils{
 		let checkIterator = path.split('[');
 		if (checkIterator.length>1){
 			iterator =checkIterator[checkIterator.length-1].split(']')[0];
-		}
+		} else iterator = 1;
 		return iterator;
 	}
 

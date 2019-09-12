@@ -50,11 +50,11 @@ property.configDir.forEach(configDirPath=>{
 })
 
 //Read Data
-if (Utils.isPrimitive(property.inputDir)){
-	property.inputDir = [property.inputDir]
-}
 let data = {};
 if(property.inputDir){
+	if (property.inputDirUtils.isPrimitive(property.inputDir)){
+		property.inputDir = [property.inputDir]
+	}
 	property.inputDir.forEach(inputDirPath=>{
 		inputDirPath=basePath+inputDirPath;
 		Object.assign(data,FileReader.readDataDir(inputDirPath))
@@ -173,6 +173,8 @@ for (let primaryKeyValue of primaryKeys.keys()){
 }
 if(property.outputFormat === 'csv'){
 	tablesOutput.forEach((table,tableName) => {
+		let out = table.toJSON();
+		console.log(tableName,out);
 		fs.writeFileSync(outputDir+tableName+'.'+property.outputFormat,table.toString('$'));
 	})	
 }

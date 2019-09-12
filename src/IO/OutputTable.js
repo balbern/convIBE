@@ -68,4 +68,14 @@ export default class OutputTable {
 		})
 		return string;
 	}
+
+	toJSON(){
+		return this.data.map((row) => {
+			var json = {};
+			this.header.forEach((headItem,index) => {
+				json[headItem] = row[index];
+			})
+			return json;
+		})
+	}
 }
