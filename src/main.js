@@ -66,7 +66,8 @@ if(property.inputDir){
 if(pg&&DB){
 	console.log('Loading Data from DB')
 	let db = new DB()
-	property.inputDBTables.forEach(async tableName => {
+	for(let index = 0; index < property.inputDBTables.length; index++){
+		let tableName = property.inputDBTables[index];
 		let splitName = tableName.split('.');
 		if(splitName[1]){
 			console.log("Setting Schema");
@@ -74,9 +75,8 @@ if(pg&&DB){
 			tableName = splitName[1];
 		}
 		let table = await db.getTable(tableName).then(d => {return d;}).catch(e => console.error(e.stack));
-		data = {...data,...table};	
-	})
-	
+		data[table.name] = table;
+	}
 }
 
 //Link Tables according to property file
