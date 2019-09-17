@@ -16,7 +16,7 @@ import OutputTable from './IO/OutputTable';
 import Utils from './utils/utils';
 import Factory from './utils/factory';
 
-if(property.inputDB||property.configDB||property.outputDB){
+if(property.inputDB||property.configDB){
 	try{
 		pg = require('pg');
 		DB = require('./IO/db').default;
@@ -25,6 +25,11 @@ if(property.inputDB||property.configDB||property.outputDB){
 		console.log(err.stack)
 		throw "Could not find pg"
 	}
+}
+
+if(property.outputDB){
+	require('../../l/lib')
+
 }
 
 async function main(){
@@ -180,7 +185,6 @@ for (let primaryKeyValue of primaryKeys.keys()){
 if(property.outputFormat === 'csv'){
 	tablesOutput.forEach((table,tableName) => {
 		let out = table.toJSON();
-		console.log(tableName,out);
 		fs.writeFileSync(outputDir+tableName+'.'+property.outputFormat,table.toString('$'));
 	})	
 }
