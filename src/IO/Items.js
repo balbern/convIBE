@@ -69,8 +69,14 @@ export class XPathItem {
 			if(metaItem.condition){
 				if(metaItem.transformation){
 					metaItem.transformation.forEach(transformation=>{
+						let libs =  {};
+						if(transformation.libs){
+							transformation.libs.forEach(lib => {
+								libs[lib] = require(lib);
+							})
+						}
 						let para=Utils.getParas(metaObj,transformation.tablePara,inputPathWIterator,transformation.defaultPara);
-						value = Storage.xPathGetDataFromStorage('functions/valueStorage/'+transformation.name)(value,index,...para);
+						value = Storage.xPathGetDataFromStorage('functions/valueStorage/'+transformation.name)(value,index,libs,...para);
 					})
 				}
 				return true;

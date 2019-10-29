@@ -79,6 +79,7 @@ if(pg&&DB){
 			await db.setSchema(splitName[0]);
 			tableName = splitName[1];
 		}
+		console.log("Loading Table "+tableName);
 		let table = await db.getTable(tableName).then(d => {return d;}).catch(e => console.error(e.stack));
 		data[table.name] = table;
 	}
