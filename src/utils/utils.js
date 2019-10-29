@@ -10,15 +10,18 @@ class Utils{
 		if (Array.isArray(conditionalValue)){
 			return conditionalValue.includes(realValue);
 		} else if (typeof conditionalValue==='string'){
-			if (conditionalValue==='*'){
-				return !(realValue===''||realValue==="NO_TRANSLATION");
+			if (conditionalValue.startsWith('!')){
+				return !this.conditionCheck(realValue,conditionalValue.slice(1));
+			} 
+			else if (conditionalValue==='*'){
+				return !(realValue===''||realValue==="NO_TRANSLATION"||realValue===null);
 			}
 			else if (conditionalValue===realValue){
 				return true;
-			}
-			else if (conditionalValue.startsWith('!')){
-				return !this.conditionCheck(realValue,conditionalValue.slice(1));
 			} 
+			else if (conditionalValue===''){
+				return (realValue===''||realValue==="NO_TRANSLATION"||realValue===null);
+			}
 			else {
 				return false;
 			}
