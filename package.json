@@ -7,7 +7,8 @@
     "@babel/runtime": "^7.5.5",
     "js2xmlparser": "^3.0.0",
     "openpgp": "^4.6.2",
-    "pretty-ms": "^5.0.0"
+    "pretty-ms": "^5.0.0",
+    "untildify": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.5.5",

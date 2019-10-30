@@ -1,4 +1,5 @@
 import fs from 'fs';
+import untildify from 'untildify'
 import Storage from '../store/Storage';
 import Table from './Table';
 import Factory from '../utils/factory';
@@ -91,7 +92,7 @@ class FileReader{
 		})); 
 	}
 	read(path){
-		return fs.readFileSync(path,'utf8');
+		return fs.readFileSync(untildify(path),'utf8');
 	}
 	handlePriority(namespace,path){
 		let value = path.split("(");
