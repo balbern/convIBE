@@ -15,6 +15,7 @@ import MetaObj from './IO/MetaObj';
 import OutputTable from './IO/OutputTable';
 import Utils from './utils/utils';
 import Factory from './utils/factory';
+import Crypt from './IO/Crypt'
 
 if(property.inputDB||property.configDB){
 	try{
@@ -160,7 +161,11 @@ for (let primaryKeyValue of primaryKeys.keys()){
 						console.log('please specify an output file format under property.outputFormat');
 				}
 				if(property.outputFormat != 'csv'){
-					fs.writeFileSync(outputDir+fileName+'.'+property.outputFormat,fileContent);	
+					if(property.encrypt){
+						fileContent = await Crypt.encrypt(fileContent)
+					}
+					console.log('Writting',outputDir+fileName+'.'+property.outputFormat)
+					fs.writeFileSync(outputDir+fileName+'.'+property.outputFormat,fileContent);
 				}
 			}
 			catch(e){
