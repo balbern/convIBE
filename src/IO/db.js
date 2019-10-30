@@ -30,6 +30,15 @@ export default class DB {
   		return table;
   	}
 
+    async setDBLink(dblink){
+      let keys = Object.keys(dblink)
+      for (var i = 0; i < Object.keys(dblink).length; i++) {
+        console.log("select dblink_connect_u('"+keys[i]+"','dbname="+dblink[keys[i]]+"')");
+        return await this.query({text:"select dblink_connect_u('"+keys[i]+"','dbname="+dblink[keys[i]]+"')"});
+      }
+      
+    }
+
   	async setSchema(schemaName){
   		let res = await this.query({text:'SET search_path TO '+schemaName,rowMode:'array'})
   		return res;

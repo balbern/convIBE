@@ -72,6 +72,10 @@ if(property.inputDir){
 if(pg&&DB){
 	console.log('Loading Data from DB')
 	let db = new DB()
+	if(property.dblink){
+		console.log("Setting dblink",property.dblink)
+		await db.setDBLink(property.dblink)
+	}
 	for(let index = 0; index < property.inputDBTables.length; index++){
 		let tableName = property.inputDBTables[index];
 		let splitName = tableName.split('.');

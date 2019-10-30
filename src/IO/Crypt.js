@@ -18,7 +18,7 @@ class Crypt {
 
 	readPassword(){
 		try{
-			let password = FileReader.read(property.cryptAbsolutePath)	
+			let password = FileReader.read(property.cryptAbsolutePath).trim()
 			return password;
 		}
 		catch (e) {
