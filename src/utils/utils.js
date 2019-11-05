@@ -141,16 +141,17 @@ class Utils{
 			data = Storage.xPathGetDataWithIterator(dir,origData);
 		}
 	    data.forEach(entry => {
-			if(!remove.every(removeItem => {
+	    	let removeCheck = false;
+			remove.forEach(removeItem => {
 				if(entry.has(removeItem)){
 					newArray.push(entry.get(removeItem)[0]);
-					return true;
-				} else {
-					return false;
+					removeCheck = true;
 				}
-			})){
-				newArray.push(entry);
+			})
+			if(!removeCheck){
+				newArray.push(entry);	
 			}
+			
 		})
 		return Storage.xPathGetDataWithIterator(dir,origData,newArray);
 	}
