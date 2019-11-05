@@ -58,7 +58,7 @@ property.configDir.forEach(configDirPath=>{
 //Read Data
 let data = {};
 if(property.inputDir){
-	if (property.inputDirUtils.isPrimitive(property.inputDir)){
+	if (Utils.isPrimitive(property.inputDir)){
 		property.inputDir = [property.inputDir]
 	}
 	property.inputDir.forEach(inputDirPath=>{
