@@ -11,7 +11,9 @@ import FileReader from '../IO/FileReader';
 
 class Crypt {
 	constructor() {
-		this.password = this.readPassword()
+		if(property.encrypt){
+			this.password = this.readPassword()
+		}
 	}
 
 
@@ -44,5 +46,4 @@ class Crypt {
 	}
 
 }
-
 export default (new Crypt());
