@@ -211,7 +211,17 @@ class Utils{
 	}
 
 	transformToMetaObjRec(data,fileName,key,keyValue){
-		let rows = data[fileName].indexData[key].get(keyValue);
+		//console.log(fileName,key,keyValue)
+		let rows;
+		try {
+			rows = data[fileName].indexData[key].get(keyValue);	
+		}
+		catch (e){
+			this.error(["Can not call index column",key,"on",fileName])
+			this.error(["Forgot to index?"])
+			console.log(e.stack)
+			process.exit()
+		}
 		if(data[fileName].dependentColumn&&rows){
 		Object.entries(data[fileName].dependentColumn).forEach(
 			([depFileName,columns]) => {
@@ -223,7 +233,7 @@ class Utils{
 
 	writeDepDataToData(rows,data,depFileName,columns,fileName){
 		let iterators = Storage.arrayGetDataFromStorage(['ITERATOR',namespace,fileName]);
-		rows.every(
+		rows.forEach(
 		(row,iterator) => 
 		{
 			if(!row.dependentData){
@@ -503,6 +513,13 @@ class Utils{
 			}	
 		})
 		return strMap;
+	}
+	error(string){
+		console.log('\x1b[31m',...string,'\x1b[0m')
+	}
+
+	warning(string){
+		console.log('\x1b[33m',...string,'\x1b[0m')
 	}
 }
 export default (new Utils());
