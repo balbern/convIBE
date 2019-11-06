@@ -200,6 +200,11 @@ class Utils{
 			Object.entries(data[startFile].dependentColumn).forEach(
 				([depFileName,columns]) => {
 					//Iterate over indexData to column
+					console.log(depFileName,columns)
+					if(!metaObj[columns.depColumn]){
+						this.error([depFileName,"has no column",columns.depColumn,"it is needed to connect to",startFile])
+						process.exit()
+					}
 					metaObj[columns.depColumn].forEach(
 						(rows,keyValue) => {
 							//Iterate over rows by that key
