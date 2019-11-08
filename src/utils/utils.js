@@ -200,9 +200,8 @@ class Utils{
 			Object.entries(data[startFile].dependentColumn).forEach(
 				([depFileName,columns]) => {
 					//Iterate over indexData to column
-					console.log(depFileName,columns)
 					if(!metaObj[columns.depColumn]){
-						this.error([depFileName,"has no column",columns.depColumn,"it is needed to connect to",startFile])
+						this.error([startFile,"has no index column",columns.depColumn,"it is needed to connect to",depFileName])
 						process.exit()
 					}
 					metaObj[columns.depColumn].forEach(
@@ -262,6 +261,10 @@ class Utils{
 	*/
 	adjustTables(data,tablesInfoObj){
 		Object.keys(tablesInfoObj).forEach(table=>{
+			if(!data[table]){
+				this.error([table,"is not loaded"])
+				process.exit()
+			}
 			//deletes Data according to specific delete pattern
 			if (tablesInfoObj[table].deleteData){
 				Object.keys(tablesInfoObj[table].deleteData).forEach(columnName=>{
@@ -279,7 +282,15 @@ class Utils{
 			//reduces Data to one entry per primary key
 			if(tablesInfoObj[table].primaryKey){
 				let primaryKey = tablesInfoObj[table].primaryKey;
-					data[table].deleteRedundantData(primaryKey);				
+				try {
+					data[table].deleteRedundantData(primaryKey);
+					
+				}
+				catch (e) {
+					console.log(e.stack)
+					this.error(["Can not set",primaryKey,"as primary key on",table])
+					process.exit()
+				}
 			}
 			//indexes Data
 			if (tablesInfoObj[table].indexColumns){
