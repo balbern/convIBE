@@ -50,6 +50,9 @@ class FileReader{
 			else if(prefix==='REMOVEKEY'){
 				this.handleRemoveKey(namespace,path,value);	
 			}
+			else if(prefix==='FORCEARRAY'){
+				this.handleForceArray(namespace,path,value);	
+			}
 			 else {
 				if(prefix){
 					console.log('Warning: It may be that the given prefix',prefix,'is not handled yet, i.e. line will not be processed correctly!');
@@ -132,6 +135,13 @@ class FileReader{
 			Storage.arrayAddToStorage(['REMOVEKEY',namespace,path],[]);
 		}
 		Storage.arrayGetDataFromStorage(['REMOVEKEY',namespace,path,'valueStorage']).push(value);
+	}
+
+	handleForceArray(namespace,path){
+		if (!Storage.arrayGetDataFromStorage(['FORCEARRAY',namespace,'valueStorage'])){
+			Storage.arrayAddToStorage(['FORCEARRAY',namespace],[]);
+		}
+		Storage.arrayGetDataFromStorage(['FORCEARRAY',namespace,'valueStorage']).push(path);
 	}
 
 	readDataDir(dir){

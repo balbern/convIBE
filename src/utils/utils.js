@@ -445,16 +445,26 @@ class Utils{
 	}
 
 	strMapToObj(strMap){
+		let forceArray = Storage.arrayGetDataFromStorage(['FORCEARRAY',namespace,'valueStorage'])
+		return this.strMapToObjRec(strMap,forceArray)
+	}
+
+	strMapToObjRec(strMap,forceArray,path=""){
+		//console.log(JSON.stringify(strMap))
 		let obj = {};//Object.create(null);
 		if(typeof strMap==='object'){
 			for (let [key,value] of strMap){
+				let keyString = key;
+				if(path!=="") {
+					keyString = path+"/"+key
+				}
 				if(value.constructor.name!=='Object'){
-					if(value.length===1){
-						obj[key] = this.strMapToObj(value[0]);
+					if(value.length===1&&!forceArray.includes(keyString)){
+						obj[key] = this.strMapToObjRec(value[0],forceArray,keyString);
 					} else {
 						let objArray = [];
 						value.forEach((map) => {
-							objArray.push(this.strMapToObj(map))
+							objArray.push(this.strMapToObjRec(map,forceArray,keyString))
 						})
 						obj[key] = objArray;
 					}
@@ -530,6 +540,8 @@ class Utils{
 		})
 		return strMap;
 	}
+
+
 	error(string){
 		console.log('\x1b[31m',...string,'\x1b[0m')
 	}
