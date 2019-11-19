@@ -35,7 +35,7 @@ export class DataItem {
 	}
 
 	writeTo(dataObject){
-		this.toItems.filter(item => item.checkedCondition&&item.value&&item.value!=="NO_TRANSLATION").forEach(item=>{
+		this.toItems.filter(item => item.checkedCondition&&item.value!=="NO_TRANSLATION").forEach(item=>{
 				item.writeXPathItemTo(dataObject);
 		})
 	}

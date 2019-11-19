@@ -450,7 +450,6 @@ class Utils{
 	}
 
 	strMapToObjRec(strMap,forceArray,path=""){
-		//console.log(JSON.stringify(strMap))
 		let obj = {};//Object.create(null);
 		if(typeof strMap==='object'){
 			for (let [key,value] of strMap){
