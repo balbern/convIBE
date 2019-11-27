@@ -454,11 +454,14 @@ class Utils{
 		if(typeof strMap==='object'){
 			for (let [key,value] of strMap){
 				let keyString = key;
+				let forceArrayCheck = false;
 				if(path!=="") {
 					keyString = path+"/"+key
 				}
+				if(forceArray)
+					forceArrayCheck = forceArray.includes(keyString)
 				if(value.constructor.name!=='Object'){
-					if(value.length===1&&!forceArray.includes(keyString)){
+					if(value.length===1&&!forceArrayCheck){
 						obj[key] = this.strMapToObjRec(value[0],forceArray,keyString);
 					} else {
 						let objArray = [];
