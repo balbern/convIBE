@@ -321,7 +321,11 @@ class Utils{
 		return parentObj;
 	}
 
-	configWalker(origdata,data,startTable,outputFormat,indexObj={},parentPath="",parentObj={}){
+	configWalker(origdata,data,startTable,outputFormat,indexObj={toPath:{},fromPath:{}},orgParentPath="",number="",parentObj={toPath:{},fromPath:{}},addParentPath=true){
+		let parentPath = ""
+		if(orgParentPath!==""){
+			parentPath =orgParentPath+'/'+number+'/'	
+		}
 		let subParentObj = JSON.parse(JSON.stringify(parentObj));	
 		let tableNamespace = Storage.xPathGetDataFromStorage(namespace);
 		let startTableConfigs = tableNamespace.get(startTable);
@@ -338,24 +342,82 @@ class Utils{
 				let tempToPath = [];
 				toPath.forEach(toPathItem => {
 					let tempToPathItem = toPathItem;
-					Object.entries(tempObj).forEach(([toPathIterator,key]) => {
+					Object.entries(tempObj.toPath).forEach(([toPathIterator,key]) => {
 						if(toPathItem===toPathIterator||toPathItem.startsWith(toPathIterator+'/')){
+							//console.log(toPathIterator,tempToPathItem)
 							tempToPathItem = this.updatePathwIteratorPath(toPathIterator+'['+key+']',tempToPathItem);
+							//console.log(tempToPathItem)
 						}
 					})
 					tempToPath.push(tempToPathItem);
 				})
+				//console.log("configWalker,tempObj",tempObj,tempToPath)
 				if(iteratorObj){
 					this.insertIterators(fromPath,toPath,iteratorObj,data,startTable,outputFormat);
-				} else {
-					let value = data.xPathGetDataWithIterator(parentPath+fromPath);
-					if(value){
-						data.dataToDataItem(startTable,fromPath,value,toPath,outputFormat,data,parentPath+fromPath,tempToPath);
+				}
+				let fromPathWithIterator = parentPath+fromPath
+				Object.entries(tempObj.fromPath).forEach(([fromPathIterator,key]) => {
+					if(!addParentPath){
+						fromPathWithIterator = fromPath
+						if(fromPath.startsWith(fromPathIterator+'/')){
+							fromPathWithIterator = this.updatePathwIteratorPath(fromPathIterator+'['+key+']',fromPath);	
+						}
+						//console.log("FromPathIterator",fromPathIterator,key,fromPath)
+						
+						//console.log(fromPathWithIterator)
 					}
+				})
+				/*if(!addParentPath&&fromPath.startsWith(orgParentPath)){
+					console.log("configWalker,updatePathwIteratorPath",parentPath,fromPath)
+					fromPathWithIterator = this.updatePathwIteratorPath(orgParentPath+'['+number+']',fromPath).replace('[','/').replace(']','')
+				}*/
+				//console.log("configWalker,fromPathWithIterator",fromPathWithIterator)
+				let value = data.xPathGetDataWithIterator(fromPathWithIterator);
+				if(value){
+					//console.log("configWalker,fromPathWithIterator,value",fromPathWithIterator,value)
+					data.dataToDataItem(startTable,fromPath,value,toPath,outputFormat,data,parentPath+fromPath,tempToPath);
+				
 				}
 			});
 		}
+
 		outputFormat.insertAttribute(startTable,tempObj,data,parentPath);
+		let iterators = Storage.arrayGetDataFromStorage(['ITERATOR',namespace,startTable]);
+		if(iterators){
+			iterators.forEach((entry,nextParentPath) =>{
+				let rows = data.xPathGetDataWithIterator(parentPath+nextParentPath)
+				if(rows){
+					rows.forEach((line,key) => {
+						//console.log("iterator,key,line",key,line)
+						entry.get("valueStorage").forEach(iterator=>{
+							if(!subParentObj.toPath[iterator]){
+								subParentObj.toPath[iterator] = 0;	
+							}
+							if(!indexObj.toPath[iterator]){
+								indexObj.toPath[iterator]=0;
+							}
+							indexObj.toPath[iterator]++;
+							subParentObj.toPath[iterator]++;
+							if(!subParentObj.fromPath[nextParentPath]){
+								subParentObj.fromPath[nextParentPath] = 0;	
+				}
+							if(!indexObj.fromPath[nextParentPath]){
+								indexObj.fromPath[nextParentPath]=0;
+							}
+							indexObj.fromPath[nextParentPath]++;
+							subParentObj.fromPath[nextParentPath]++;
+							//console.log("subParentObj",subParentObj)
+							this.configWalker(origdata,data,startTable,outputFormat,indexObj,nextParentPath,key,subParentObj,false);
+						})
+
+
+					})
+				}
+				//console.log(key,entry.get('valueStorage')[0])
+					
+					
+			})
+		}
 		if(origdata[startTable].dependentColumn){
 			Object.entries(origdata[startTable].dependentColumn).forEach(([fileName,dependentColumn])=>{
 				let nextParentPath = parentPath+"dependentData/"+fileName;
@@ -377,7 +439,7 @@ class Utils{
 							})
 						}
 						//Recursive call
-						this.configWalker(origdata,data,fileName,outputFormat,indexObj,nextParentPath+'/'+key+'/',subParentObj);	
+						this.configWalker(origdata,data,fileName,outputFormat,indexObj,nextParentPath,key,subParentObj,true);	
 					})
 				}
 			})
@@ -453,6 +515,7 @@ class Utils{
 		let obj = {};//Object.create(null);
 		if(typeof strMap==='object'){
 			for (let [key,value] of strMap){
+				//console.log("value",value)
 				let keyString = key;
 				let forceArrayCheck = false;
 				if(path!=="") {
@@ -461,18 +524,25 @@ class Utils{
 				if(forceArray)
 					forceArrayCheck = forceArray.includes(keyString)
 				if(value.constructor.name!=='Object'){
-					if(value.length===1&&!forceArrayCheck){
-						obj[key] = this.strMapToObjRec(value[0],forceArray,keyString);
+					//console.log("value",value,"typeof",typeof value)
+					if(typeof value==="string"){
+						obj[key] = value
 					} else {
-						let objArray = [];
-						value.forEach((map) => {
-							objArray.push(this.strMapToObjRec(map,forceArray,keyString))
-						})
-						obj[key] = objArray;
+						if(value.length===1&&!forceArrayCheck){
+							obj[key] = this.strMapToObjRec(value[0],forceArray,keyString);
+						} else {
+							let objArray = [];
+							value.forEach((map) => {
+								//console.log("Iterate",value,".forEach",map)
+								objArray.push(this.strMapToObjRec(map,forceArray,keyString))
+							})
+							obj[key] = objArray;
+						}
 					}
 				} else{
 					obj[key] = value;
 				}
+			//console.log("entry",key,value,obj[key])
 			}	
 		} else {
 			obj = strMap;

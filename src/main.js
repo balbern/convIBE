@@ -3,6 +3,7 @@ import path from 'path';
 import {performance, PerformanceObserver} from 'perf_hooks';
 import prettyMS from 'pretty-ms'
 //import property.json from args
+console.log(process.argv[2])
 let propertyPath = process.argv[2];
 let basePath = path.dirname(propertyPath)+'/';
 console.log("basePath",basePath);
@@ -33,7 +34,7 @@ if(property.outputDB){
 
 }
 
-async function main(){
+async function main(data={}){
 
 //Read from one or more paths
 if (Utils.isPrimitive(property.configDir)){
@@ -56,7 +57,6 @@ property.configDir.forEach(configDirPath=>{
 })
 
 //Read Data
-let data = {};
 if(property.inputDir){
 	if (Utils.isPrimitive(property.inputDir)){
 		property.inputDir = [property.inputDir]
@@ -89,7 +89,7 @@ if(pg&&DB){
 		data[table.name] = table;
 	}
 }
-
+//console.log(data)
 //Link Tables according to property file
 Utils.adjustTables(data,property.tables);
 
@@ -97,7 +97,8 @@ let startTable = property.startTable;
 
 //Build MetaObj
 let metaDataObj = Utils.transformToMetaObj(data,startTable);
-
+//console.log(metaDataObj._id)
+//console.log(metaDataObj.person_id)
 //Iterate over Data
 //Early Breaks for testing like SQL limit 10 or top 10
 let breakPoint = false;
@@ -151,9 +152,7 @@ for (let primaryKeyValue of primaryKeys.keys()){
 						break;
 					case 'csv':
 						fileContent = output.toCSV();
-						if (property.xPathGetFileNameFromXML){
-							fileName = output.xPathGetDataFromXML(property.xPathGetFileNameFromXML)[0];	
-						}
+						//console.log("main,filecontent",fileContent)
 						output.xml.forEach((content,fileName) =>{
 							if(!tablesOutput.has(fileName)){
 								tablesOutput.set(fileName,new OutputTable(fileName));

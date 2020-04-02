@@ -51,6 +51,7 @@ export class XPathItem {
         this.toOrginalPath = toOrginalPath;
 	}
 	writeXPathItemTo(dataObject){
+		//console.log(this.toPath,this.value)
 		dataObject.XPathSetValue(this.toPath,this.value);
 	}
 	setInitialPath(path){
@@ -76,6 +77,7 @@ export class XPathItem {
 							})
 						}
 						let para=Utils.getParas(metaObj,transformation.tablePara,inputPathWIterator,transformation.defaultPara);
+						//console.log(metaItem,value,index,libs,...para,path,metaObj)
 						value = Storage.xPathGetDataFromStorage('functions/valueStorage/'+transformation.name)(value,index,libs,...para);
 					})
 				}

@@ -106,6 +106,7 @@ class XML {
 
 	toCSV(){
 		if(this.xml){
+			//console.log("Converting to CSV:",this.xml)
 			return Utils.strMapToObj(this.xml);
 		}	
 	}
