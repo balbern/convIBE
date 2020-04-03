@@ -47,7 +47,7 @@ export default class Objects extends DataFormat {
 	}
 
 	deleteRedundantData(primaryKey){
-		console.log("Not implemented since not needed till now")
+		console.log("Objects.deleteRedundantData is not implemented since it is not needed till now")
 	}
 
 	doIndexData(column){

@@ -116,7 +116,10 @@ class Storage {
 				}   
 			} else {
 				if(Utils.isPrimitive(map.get(key)[iterator])){
-					console.log("Warning "+fields+" is not writing since "+map.get(key)[iterator]+ " is already a Primitive");
+					if(value === map.get(key)[iterator]&&property.debug){
+						console.log("Warning "+fields+" is not writing since "+map.get(key)[iterator]+ " is already a Primitive");	
+					}
+					
 				}
 			}
 			map=map.get(key)[iterator];

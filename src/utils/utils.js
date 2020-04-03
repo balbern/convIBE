@@ -324,7 +324,7 @@ class Utils{
 	configWalker(origdata,data,startTable,outputFormat,indexObj={toPath:{},fromPath:{}},orgParentPath="",number="",parentObj={toPath:{},fromPath:{}},addParentPath=true){
 		let parentPath = ""
 		if(orgParentPath!==""){
-			parentPath =orgParentPath+'/'+number+'/'	
+			parentPath =orgParentPath+'/'+number+'/'
 		}
 		let subParentObj = JSON.parse(JSON.stringify(parentObj));	
 		let tableNamespace = Storage.xPathGetDataFromStorage(namespace);
@@ -351,7 +351,6 @@ class Utils{
 					})
 					tempToPath.push(tempToPathItem);
 				})
-				//console.log("configWalker,tempObj",tempObj,tempToPath)
 				if(iteratorObj){
 					this.insertIterators(fromPath,toPath,iteratorObj,data,startTable,outputFormat);
 				}
@@ -362,15 +361,8 @@ class Utils{
 						if(fromPath.startsWith(fromPathIterator+'/')){
 							fromPathWithIterator = this.updatePathwIteratorPath(fromPathIterator+'['+key+']',fromPath);	
 						}
-						//console.log("FromPathIterator",fromPathIterator,key,fromPath)
-						
-						//console.log(fromPathWithIterator)
 					}
 				})
-				/*if(!addParentPath&&fromPath.startsWith(orgParentPath)){
-					console.log("configWalker,updatePathwIteratorPath",parentPath,fromPath)
-					fromPathWithIterator = this.updatePathwIteratorPath(orgParentPath+'['+number+']',fromPath).replace('[','/').replace(']','')
-				}*/
 				//console.log("configWalker,fromPathWithIterator",fromPathWithIterator)
 				let value = data.xPathGetDataWithIterator(fromPathWithIterator);
 				if(value){
@@ -380,7 +372,6 @@ class Utils{
 				}
 			});
 		}
-
 		outputFormat.insertAttribute(startTable,tempObj,data,parentPath);
 		let iterators = Storage.arrayGetDataFromStorage(['ITERATOR',namespace,startTable]);
 		if(iterators){
@@ -445,6 +436,8 @@ class Utils{
 			})
 		}
 	}
+
+
 
 	insertIterators(fromPath,toPath,iteratorObj,data,fileName,output,i=0,cancelArray=[]){
 		//build parentobj
