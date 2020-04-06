@@ -5,6 +5,7 @@
   "main": "lib/main.js",
   "dependencies": {
     "@babel/runtime": "^7.5.5",
+    "esm": "^3.2.25",
     "js2xmlparser": "^3.0.0",
     "openpgp": "^4.6.2",
     "pretty-ms": "^5.0.0",

@@ -1,6 +1,5 @@
-let propertyPath = process.argv[2];
-let property = require(propertyPath).property;
-let namespace = property.namespace;
+import Property from '../utils/property'
+let namespace = Property.property.namespace;
 import Utils from '../utils/utils';
 import Storage from '../store/Storage';
 

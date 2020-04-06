@@ -1,6 +1,3 @@
-let propertyPath = process.argv[2];
-let property = require(propertyPath).property;
-let namespace = property.namespace;
 import Utils from '../utils/utils';
 import Storage from '../store/Storage';
 import DataFormat from './DataFormat';

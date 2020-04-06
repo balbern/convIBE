@@ -1,5 +1,5 @@
-let propertyPath = process.argv[2];
-let property = require(propertyPath).property;
+import Property from '../utils/property'
+let property = Property.property
 let namespace = property.namespace;
 import {DataItem,XPathItem} from './Items';
 import Storage from '../store/Storage';

@@ -1,8 +1,10 @@
 import Utils from '../utils/utils';
+import Property from '../utils/property'
 
 class Storage {
 	constructor(){
 		this.storage = new Map();
+		this.property = Property.property
 	}
 	//add a xPath to the Storage
 	xPathAddToStorage(xPath,value) {
@@ -105,7 +107,7 @@ class Storage {
 			}
 			if (!map.get(key)[iterator]){
 				if(i===fields.length-1){
-					if(property.outputFormat==='xml'){
+					if(this.property.outputFormat==='xml'){
 						map.get(key)[iterator]=new Map();
 						map.get(key)[iterator].set('#',value);
 					} else {
@@ -116,7 +118,7 @@ class Storage {
 				}   
 			} else {
 				if(Utils.isPrimitive(map.get(key)[iterator])){
-					if(value === map.get(key)[iterator]&&property.debug){
+					if(value === map.get(key)[iterator]&&this.property.debug){
 						console.log("Warning "+fields+" is not writing since "+map.get(key)[iterator]+ " is already a Primitive");	
 					}
 					

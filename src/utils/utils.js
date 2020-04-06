@@ -1,10 +1,11 @@
-let propertyPath = process.argv[2];
-let property = require(propertyPath).property;
-let namespace = property.namespace;
+import Property from './property'
 import Storage from '../store/Storage';
 
 class Utils{
-	constructor(){}
+	constructor(){
+		this.property = Property.property
+		this.namespace = this.property.namespace
+	}
 
 	conditionCheck(realValue,conditionalValue){
 		if (Array.isArray(conditionalValue)){
@@ -82,7 +83,7 @@ class Utils{
 				if(priortyPath){
 					priortyPath=priortyPath+'/';
 				}
-				return Storage.xPathGetDataFromStorage("PRIORITY/"+namespace+"/"+priortyPath+a[0]+'/valueStorage')-Storage.xPathGetDataFromStorage('PRIORITY/'+namespace+'/'+priortyPath+b[0]+'/valueStorage');
+				return Storage.xPathGetDataFromStorage("PRIORITY/"+this.namespace+"/"+priortyPath+a[0]+'/valueStorage')-Storage.xPathGetDataFromStorage('PRIORITY/'+this.namespace+'/'+priortyPath+b[0]+'/valueStorage');
 			}))
 		}
 		return map;
@@ -161,7 +162,7 @@ class Utils{
 		let refTable=refValuePath.split('/')[0];
 		let refColumn=refValuePath.split('/')[1];
 		let index;
-		if(property.startTable!==refTable){
+		if(Property.property.startTable!==refTable){
 			let searchPath = inputPathWIterator.split('dependentData/'+refTable);
 			if (searchPath.length===2){
 				index = searchPath[1].split('/')[1];
@@ -236,7 +237,7 @@ class Utils{
 	}
 
 	writeDepDataToData(rows,data,depFileName,columns,fileName){
-		let iterators = Storage.arrayGetDataFromStorage(['ITERATOR',namespace,fileName]);
+		let iterators = Storage.arrayGetDataFromStorage(['ITERATOR',this.namespace,fileName]);
 		rows.forEach(
 		(row,iterator) => 
 		{
@@ -322,6 +323,7 @@ class Utils{
 	}
 
 	configWalker(origdata,data,startTable,outputFormat,indexObj={toPath:{},fromPath:{}},orgParentPath="",number="",parentObj={toPath:{},fromPath:{}},addParentPath=true){
+		let namespace = Property.property.namespace
 		let parentPath = ""
 		if(orgParentPath!==""){
 			parentPath =orgParentPath+'/'+number+'/'
@@ -330,7 +332,7 @@ class Utils{
 		let tableNamespace = Storage.xPathGetDataFromStorage(namespace);
 		let startTableConfigs = tableNamespace.get(startTable);
 		let tempObj;
-		if(property.rememberIndices){
+		if(Property.property.rememberIndices){
 				tempObj = indexObj;
 		} else {
 			tempObj = subParentObj;
@@ -442,7 +444,7 @@ class Utils{
 	insertIterators(fromPath,toPath,iteratorObj,data,fileName,output,i=0,cancelArray=[]){
 		//build parentobj
 		let iteratorKeys = [...iteratorObj.keys()];
-		console.log("utils.insertIterators,iteratorKeys",iteratorObj,iteratorKeys);
+		//console.log("utils.insertIterators,iteratorKeys",iteratorObj,iteratorKeys);
 		if(iteratorObj.size>i){
 			let value = true;
 			if(cancelArray.length<i+1){
@@ -500,7 +502,7 @@ class Utils{
 	}
 
 	strMapToObj(strMap){
-		let forceArray = Storage.arrayGetDataFromStorage(['FORCEARRAY',namespace,'valueStorage'])
+		let forceArray = Storage.arrayGetDataFromStorage(['FORCEARRAY',Property.property.namespace,'valueStorage'])
 		return this.strMapToObjRec(strMap,forceArray)
 	}
 
@@ -615,4 +617,4 @@ class Utils{
 		console.log('\x1b[33m',...string,'\x1b[0m')
 	}
 }
-export default (new Utils());
+export default Utils = (new Utils());

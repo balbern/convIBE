@@ -18,9 +18,7 @@ class FileReader{
 		});
 	}
 
-	readAndPutIntoStorage(filePath) {
-		//read configfile and skip first line
-		let output = this.readByLines(filePath,1);
+	putIntoStorage(output){
 		output.forEach(line => {
 			let namespace = line[1];
 			let namespaceArray = namespace.split('/');
@@ -78,6 +76,17 @@ class FileReader{
 			}
 		});
 	}
+
+	readAndPutIntoStorage(filePath) {
+		//read configfile and skip first line
+		let output = this.readByLines(filePath,1);
+		this.putIntoStorage(output)
+	}
+
+	readFromFile(path){
+		return this.read(path)
+	}
+
 	readByLines(path,skip=0,delimiter='\t') {
 		let output = this.read(path)
 		.trim()
@@ -94,6 +103,10 @@ class FileReader{
 			return item.trim();
 		})); 
 	}
+
+
+
+
 	read(path){
 		return fs.readFileSync(untildify(path),'utf8');
 	}

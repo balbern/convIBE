@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import * as openpgp from 'openpgp';
-let propertyPath = process.argv[2];
-let property = require(propertyPath).property;
-let namespace = property.namespace;
-let basePath = path.dirname(propertyPath)+'/';
+import Property from '../utils/property'
+let property = Property.property
+let namespace = Property.property.namespace;
+let basePath = Property.property.basePath;
 
 
 import FileReader from '../IO/FileReader';
