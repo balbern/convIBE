@@ -9,7 +9,6 @@ export default class OutputTable {
 		this.data = [];
 		if(header){
 			this.header = header;	
-			console.log("ich bin doof");
 		} else {
 			this.header = [];
 		}

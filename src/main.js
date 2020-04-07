@@ -242,6 +242,21 @@ export class convIBE {
 		console.log("It took " + prettyMS(lastTime));
 
 	}
+	//input: {
+	//	fileName: {
+	//			name: fileName,
+	//			type: Objects,Table, XML,
+	//			data: []
+	//		}
+	//	}
+	prepareData(data){
+		let output = {}
+		Object.entries(data).forEach([file,name] => {
+			output[table.name] = new Factory(file.type,file.name,file.header)
+			output[table.name].data = table.data
+		})
+		return data;
+	}
 
 }
 
